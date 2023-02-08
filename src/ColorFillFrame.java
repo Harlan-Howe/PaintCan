@@ -118,6 +118,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
             System.out.println("making button.");
             Color c = chooser.getColor();
             addColorButton(c);
+            colorButtons.get(colorButtons.size()-1).setSelected(true);
             colorPanel.revalidate();
         }
     }
