@@ -14,7 +14,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
     private Color activeColor;
     private BufferedImage startImage;
     private BufferedImage workingImage;
-
+    private int startX, startY;
 
     private Object workingImageMutex;
 
@@ -146,4 +146,61 @@ public class ColorFillPanel extends JPanel implements MouseListener
     {
 
     }
+
+    class FillThread extends Thread
+    {
+        private boolean shouldInterrupt;
+        private boolean doingFillProcess;
+
+
+        public FillThread()
+        {
+            shouldInterrupt = false;
+            doingFillProcess = false;
+        }
+
+        public void interrupt() { shouldInterrupt = true;}
+        public void startFillProcess() {doingFillProcess = true;}
+        public boolean isDoingFillProcess() {return doingFillProcess;}
+
+
+        public void run() // this is what gets called when we tell this thread to start(). You should _NEVER_ call run()
+                         // directly.
+        {
+            while(true)
+            {
+                if (workingImage != null && doingFillProcess)
+                {
+                    Color startColor = getColorAt(startX, startY);
+                    System.out.println("Starting color: "+startColor);
+
+                    fillWithColor(startX, startY, startColor);
+
+                    if (!shouldInterrupt)
+                        doingFillProcess = false; // we finished without being interrupted.
+                }
+                try
+                {
+                    Thread.sleep(250); // wait a quarter second before you consider running again.
+                }catch (InterruptedException iExp)
+                {
+                    iExp.printStackTrace();
+                }
+                shouldInterrupt = false; // reset this to try again, if needed.
+            }
+        }
+
+
+        public void fillWithColor(int x, int y, Color colorToReplace)
+        {
+            // mandatory base case #0 - if we've been interrupted.
+            if (shouldInterrupt)
+                return; // bail out if we need to cancel and leave.
+
+            System.out.println("fill with color "+activeColor+" replacing "+colorToReplace+" at ("+x+", "+y+").");
+
+        }
+
+    }
+
 }
