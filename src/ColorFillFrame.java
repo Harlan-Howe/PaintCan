@@ -165,6 +165,6 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     @Override
     public void stateChanged(ChangeEvent e)
     {
-        System.out.println(thresholdSlider.getValue());
+        mainPanel.setThreshold(thresholdSlider.getValue());
     }
 }
