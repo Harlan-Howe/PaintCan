@@ -1,13 +1,15 @@
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 
 
-public class ColorFillPanel extends JPanel
+public class ColorFillPanel extends JPanel implements MouseListener
 {
     private Color activeColor;
     private BufferedImage startImage;
@@ -21,6 +23,7 @@ public class ColorFillPanel extends JPanel
         super();
         activeColor = Color.RED;
         workingImageMutex = new Object();
+        addMouseListener(this);
     }
 
     public Color getActiveColor() {
@@ -114,4 +117,33 @@ public class ColorFillPanel extends JPanel
             throw new RuntimeException("You attempted to set color for a point ("+x+", "+y+") that is out of bounds.");
     }
 
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e)
+    {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e)
+    {
+        System.out.println("Released at: ("+e.getX()+", "+e.getY()+").");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e)
+    {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e)
+    {
+
+    }
 }
