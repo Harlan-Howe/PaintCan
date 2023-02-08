@@ -36,6 +36,7 @@ public class ColorFillPanel extends JPanel
     {
         this.startImage = startImage;
         resetWorkingImage();
+        setPreferredSize(new Dimension(startImage.getWidth()+2, startImage.getHeight()));
     }
 
     @Override

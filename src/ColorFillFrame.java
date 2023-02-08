@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -105,12 +106,11 @@ public class ColorFillFrame extends JFrame implements ActionListener
         if (JFileChooser.APPROVE_OPTION == result)
         {
             lastFile = chooser.getSelectedFile();
-            String fileName = lastFile.getPath();
             try
             {
-                BufferedImage img = ((BufferedImage) (new ImageIcon(fileName).getImage()));
+                BufferedImage img = ImageIO.read(lastFile);
                 mainPanel.setStartImage(img);
-                setSize(img.getWidth() + 32, img.getHeight());
+                this.pack();
             }
             catch (Exception exp)
             {
