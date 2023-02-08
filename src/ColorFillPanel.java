@@ -12,7 +12,7 @@ public class ColorFillPanel extends JPanel
     private Color activeColor;
     private BufferedImage startImage;
     private BufferedImage workingImage;
-    private File lastFile = null;
+
 
     private Object workingImageMutex;
 
@@ -31,6 +31,13 @@ public class ColorFillPanel extends JPanel
         this.activeColor = activeColor;
         repaint();
     }
+
+    public void setStartImage(BufferedImage startImage)
+    {
+        this.startImage = startImage;
+        resetWorkingImage();
+    }
+
     @Override
     public void paintComponent(Graphics g)
     {
@@ -42,23 +49,6 @@ public class ColorFillPanel extends JPanel
             if (workingImage != null)
                 g.drawImage(workingImage, 0, 0, this);
         }
-    }
-    public void doLoadImage()
-    {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Select an Image");
-        if (lastFile!= null)
-            chooser.setSelectedFile(lastFile);
-        String[] extensions = {"jpg","gif","jpeg","png"};
-        chooser.setFileFilter(new FileNameExtensionFilter("images",extensions));
-        int result = chooser.showOpenDialog(this);
-        if (JFileChooser.APPROVE_OPTION == result)
-        {
-            lastFile = chooser.getSelectedFile();
-            String fileName = lastFile.getPath();
-            startImage = ((BufferedImage)(new ImageIcon(fileName).getImage()));
-        }
-        resetWorkingImage();
     }
 
     /**

@@ -1,8 +1,11 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ColorFillFrame extends JFrame implements ActionListener
@@ -12,6 +15,7 @@ public class ColorFillFrame extends JFrame implements ActionListener
     private JButton addButton;
     private ArrayList<ColorButton> colorButtons;
     private JColorChooser chooser;
+    private File lastFile = null;
 
     public static final Color[] startColors = {Color.RED, Color.GREEN, Color.BLUE};
 
@@ -71,6 +75,32 @@ public class ColorFillFrame extends JFrame implements ActionListener
             colorPanel.add(cb);
             cb.addActionListener(this);
             colorPanel.revalidate();
+        }
+    }
+
+    public void doLoadImage()
+    {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Select an Image");
+        if (lastFile!= null)
+            chooser.setSelectedFile(lastFile);
+        String[] extensions = {"jpg","gif","jpeg","png"};
+        chooser.setFileFilter(new FileNameExtensionFilter("images",extensions));
+        int result = chooser.showOpenDialog(this);
+        if (JFileChooser.APPROVE_OPTION == result)
+        {
+            lastFile = chooser.getSelectedFile();
+            String fileName = lastFile.getPath();
+            try
+            {
+                BufferedImage img = ((BufferedImage) (new ImageIcon(fileName).getImage()));
+                mainPanel.setStartImage(img);
+                setSize(img.getWidth() + 32, img.getHeight());
+            }
+            catch (Exception exp)
+            {
+                exp.printStackTrace();
+            }
         }
     }
 
