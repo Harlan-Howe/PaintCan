@@ -1,5 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,18 +11,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ColorFillFrame extends JFrame implements ActionListener
+import static javax.swing.SwingConstants.CENTER;
+
+public class ColorFillFrame extends JFrame implements ActionListener, ChangeListener
 {
-    private Box colorPanel;
+    private Box colorPanel, thresholdPanel;
     private ColorFillPanel mainPanel;
     private JButton addButton;
     private ArrayList<ColorButton> colorButtons;
     private JColorChooser chooser;
     private File lastFile = null;
     private JMenuItem openMenuItem;
+    private JSlider thresholdSlider;
 
     public static final Color[] startColors = {Color.RED, Color.GREEN, Color.BLUE};
-
+    public static final int MIN_THRESHOLD = 0;
+    public static final int MAX_THRESHOLD = 255;
 
     public ColorFillFrame()
     {
@@ -28,10 +34,11 @@ public class ColorFillFrame extends JFrame implements ActionListener
         getContentPane().setLayout(new BorderLayout());
         buildMenu();
         buildColorPanel();
+        buildThresholdPanel();
         mainPanel = new ColorFillPanel();
         getContentPane().add(colorPanel, BorderLayout.WEST);
         getContentPane().add(mainPanel, BorderLayout.CENTER);
-
+        getContentPane().add(thresholdPanel, BorderLayout.EAST);
         setSize(800,800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
@@ -74,6 +81,20 @@ public class ColorFillFrame extends JFrame implements ActionListener
             colorPanel.add(cb);
             cb.addActionListener(this);
         }
+    }
+
+    public void buildThresholdPanel()
+    {
+        thresholdPanel = Box.createVerticalBox();
+        thresholdSlider = new JSlider(JSlider.VERTICAL, MIN_THRESHOLD, MAX_THRESHOLD, 1);
+        thresholdSlider.addChangeListener(this);
+        thresholdSlider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        thresholdSlider.setMajorTickSpacing(16);
+        thresholdSlider.setPaintTicks(true);
+        thresholdPanel.add(new JLabel("Threshold"));
+        thresholdPanel.add(new JLabel(""+MAX_THRESHOLD));
+        thresholdPanel.add(thresholdSlider);
+        thresholdPanel.add(new JLabel(""+MIN_THRESHOLD));
     }
 
     public void makeNewButton()
@@ -132,5 +153,11 @@ public class ColorFillFrame extends JFrame implements ActionListener
             mainPanel.setActiveColor(c);
             repaint();
         }
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e)
+    {
+        System.out.println(thresholdSlider.getValue());
     }
 }
