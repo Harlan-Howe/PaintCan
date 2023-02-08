@@ -82,7 +82,7 @@ public class ColorFillFrame extends JFrame implements ActionListener
         else
         {
             Color c = ((ColorButton) e.getSource()).getMyColor();
-            mainPanel.setBackground(c);
+            mainPanel.setActiveColor(c);
             repaint();
         }
     }
