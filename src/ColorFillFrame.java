@@ -16,6 +16,7 @@ public class ColorFillFrame extends JFrame implements ActionListener
     private ArrayList<ColorButton> colorButtons;
     private JColorChooser chooser;
     private File lastFile = null;
+    private JMenuItem openMenuItem;
 
     public static final Color[] startColors = {Color.RED, Color.GREEN, Color.BLUE};
 
@@ -24,6 +25,7 @@ public class ColorFillFrame extends JFrame implements ActionListener
     {
         super("Color Fill");
         getContentPane().setLayout(new BorderLayout());
+        buildMenu();
         buildColorPanel();
         mainPanel = new ColorFillPanel();
         getContentPane().add(colorPanel, BorderLayout.WEST);
@@ -32,6 +34,19 @@ public class ColorFillFrame extends JFrame implements ActionListener
         setSize(800,800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+    }
+
+    public void buildMenu()
+    {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("File");
+        menuBar.add(fileMenu);
+
+        openMenuItem = new JMenuItem("Open");
+        openMenuItem.addActionListener(this);
+        fileMenu.add(openMenuItem);
+
+        this.setJMenuBar(menuBar);
     }
 
     public void buildColorPanel()
@@ -109,6 +124,8 @@ public class ColorFillFrame extends JFrame implements ActionListener
     {
         if (e.getSource() == addButton)
             makeNewButton();
+        else if (e.getSource() == openMenuItem)
+            doLoadImage();
         else
         {
             Color c = ((ColorButton) e.getSource()).getMyColor();
