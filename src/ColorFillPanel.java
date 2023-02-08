@@ -39,7 +39,7 @@ public class ColorFillPanel extends JPanel
             g.setColor(activeColor);
             g.fillRect(0,0, getWidth(), 2);
             if (workingImage != null)
-                g.drawImage(myCanvas, 0, 2, this);
+                g.drawImage(workingImage, 0, 2, this);
         }
     }
     public void doLoadImage()
