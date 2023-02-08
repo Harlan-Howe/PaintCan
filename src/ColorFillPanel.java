@@ -235,7 +235,27 @@ public class ColorFillPanel extends JPanel implements MouseListener
             if (shouldInterrupt)
                 return; // bail out if we need to cancel and leave.
 
-            System.out.println("fill with color "+activeColor+" replacing "+colorToReplace+" at ("+x+", "+y+").");
+           // System.out.println("fill with color "+activeColor+" replacing "+colorToReplace+" at ("+x+", "+y+").");
+
+            if (x<0 || x>=workingImage.getWidth() || y<0 || y>= workingImage.getHeight())
+                return;
+
+            if (!colorMatch(colorToReplace,getColorAt(x,y)))
+                return;
+
+            setColorAt(x,y,activeColor);
+            repaint();
+
+            for (int i=-1; i<2; i++)
+                for (int j=-1; j<2; j++)
+                {
+                    if (i==0 && j==0)
+                        continue;
+//                    if (x+i<0 || x+i>=workingImage.getWidth() || y+j < 0 || y+j >= workingImage.getHeight())
+//                        continue;
+//                    if (colorMatch(colorToReplace, getColorAt(x+i, y+j)))
+                        fillWithColor(x+i, y+j, colorToReplace);
+                }
 
         }
 

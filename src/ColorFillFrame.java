@@ -76,6 +76,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         {
             addColorButton(c);
         }
+        colorButtons.get(0).setSelected(true);
     }
 
     public void buildThresholdPanel()
@@ -146,6 +147,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
                 exp.printStackTrace();
             }
         }
+        mainPanel.repaint();
     }
 
     @Override
