@@ -15,6 +15,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
     private BufferedImage startImage;
     private BufferedImage workingImage;
     private int startX, startY;
+    private FillThread fillingThread;
 
     private Object workingImageMutex;
 
@@ -133,6 +134,14 @@ public class ColorFillPanel extends JPanel implements MouseListener
     public void mouseReleased(MouseEvent e)
     {
         System.out.println("Released at: ("+e.getX()+", "+e.getY()+").");
+        if (fillingThread == null)
+        {
+            fillingThread = new FillThread();
+            fillingThread.start();
+        }
+        startX = e.getX();
+        startY = e.getY();
+        fillingThread.startFillProcess();
     }
 
     @Override
@@ -167,10 +176,19 @@ public class ColorFillPanel extends JPanel implements MouseListener
         public void run() // this is what gets called when we tell this thread to start(). You should _NEVER_ call run()
                          // directly.
         {
+            System.out.println("fill thread has started.");
             while(true)
             {
                 if (workingImage != null && doingFillProcess)
                 {
+                    System.out.println("Initiating FillProcess.");
+                    if (startX<0 || startX >=workingImage.getWidth() ||startY < 0 || startY >= workingImage.getHeight())
+                    {
+                        System.out.println("Start point was out of bounds. Resetting. " +
+                                "(This might happen when we are selecting a file.");
+                        doingFillProcess = false;
+                        continue;
+                    }
                     Color startColor = getColorAt(startX, startY);
                     System.out.println("Starting color: "+startColor);
 
