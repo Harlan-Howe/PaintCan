@@ -88,13 +88,17 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         thresholdPanel = Box.createVerticalBox();
         thresholdSlider = new JSlider(JSlider.VERTICAL, MIN_THRESHOLD, MAX_THRESHOLD, 1);
         thresholdSlider.addChangeListener(this);
-        thresholdSlider.setAlignmentX(Component.CENTER_ALIGNMENT);
         thresholdSlider.setMajorTickSpacing(16);
         thresholdSlider.setPaintTicks(true);
         thresholdPanel.add(new JLabel("Threshold"));
         thresholdPanel.add(new JLabel(""+MAX_THRESHOLD));
         thresholdPanel.add(thresholdSlider);
         thresholdPanel.add(new JLabel(""+MIN_THRESHOLD));
+
+        for (Component jc: thresholdPanel.getComponents())
+        {
+            ((JComponent)jc).setAlignmentX(Component.CENTER_ALIGNMENT);
+        }
     }
 
     public void makeNewButton()
