@@ -20,6 +20,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     private JColorChooser chooser;
     private File lastFile = null;
     private JMenuItem openMenuItem;
+    private JMenuItem resetMenuItem;
     private JSlider thresholdSlider;
 
     public static final Color[] startColors = {Color.RED, Color.GREEN, Color.BLUE};
@@ -51,6 +52,11 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         openMenuItem = new JMenuItem("Open");
         openMenuItem.addActionListener(this);
         fileMenu.add(openMenuItem);
+
+        resetMenuItem = new JMenuItem("Reset image");
+        resetMenuItem.addActionListener(this);
+        resetMenuItem.setEnabled(false);
+        fileMenu.add(resetMenuItem);
 
         this.setJMenuBar(menuBar);
     }
@@ -156,8 +162,13 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         if (e.getSource() == addButton)
             makeNewButton();
         else if (e.getSource() == openMenuItem)
+        {
             doLoadImage();
-        else
+            resetMenuItem.setEnabled(true);
+        }
+        else if (e.getSource() == resetMenuItem)
+            mainPanel.resetWorkingImage();
+        else if (e.getSource() instanceof ColorButton)
         {
             Color c = ((ColorButton) e.getSource()).getMyColor();
             mainPanel.setActiveColor(c);
