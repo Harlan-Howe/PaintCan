@@ -8,16 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import static javax.swing.SwingConstants.CENTER;
 
 public class ColorFillFrame extends JFrame implements ActionListener, ChangeListener
 {
     private Box colorPanel, thresholdPanel;
     private ColorFillPanel mainPanel;
     private JButton addButton;
+    private ButtonGroup colorButtonGroup;
     private ArrayList<ColorButton> colorButtons;
     private JColorChooser chooser;
     private File lastFile = null;
@@ -76,10 +74,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         colorButtons = new ArrayList<ColorButton>();
         for (Color c: startColors)
         {
-            ColorButton cb = new ColorButton(c);
-            colorButtons.add(cb);
-            colorPanel.add(cb);
-            cb.addActionListener(this);
+            addColorButton(c);
         }
     }
 
@@ -101,6 +96,17 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         }
     }
 
+    public void addColorButton(Color c)
+    {
+        ColorButton cb = new ColorButton(c);
+        colorButtons.add(cb);
+        colorPanel.add(cb);
+        cb.addActionListener(this);
+        if (colorButtonGroup == null)
+            colorButtonGroup = new ButtonGroup();
+        colorButtonGroup.add(cb);
+    }
+
     public void makeNewButton()
     {
         if (chooser == null)
@@ -111,10 +117,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         {
             System.out.println("making button.");
             Color c = chooser.getColor();
-            ColorButton cb = new ColorButton(c);
-            colorButtons.add(cb);
-            colorPanel.add(cb);
-            cb.addActionListener(this);
+            addColorButton(c);
             colorPanel.revalidate();
         }
     }
