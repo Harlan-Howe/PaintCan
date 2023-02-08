@@ -85,6 +85,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
         {
             workingImage = deepcopy(startImage);
         }
+        repaint();
     }
 
     /**
