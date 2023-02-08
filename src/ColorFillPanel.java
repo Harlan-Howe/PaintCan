@@ -16,6 +16,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
     private BufferedImage workingImage;
     private int startX, startY;
     private FillThread fillingThread;
+    private double thresholdSquared;
 
     private Object workingImageMutex;
 
@@ -41,6 +42,25 @@ public class ColorFillPanel extends JPanel implements MouseListener
         this.startImage = startImage;
         resetWorkingImage();
         setPreferredSize(new Dimension(startImage.getWidth()+2, startImage.getHeight()));
+    }
+
+    public void setThreshold(double threshold)
+    {
+        thresholdSquared = Math.pow(threshold,2);
+        System.out.println("Threshold squared is now "+thresholdSquared);
+    }
+
+    /**
+     * determines whether the two given colors have a color distance less than the threshold.
+     * @param c1
+     * @param c2
+     * @return whether colorDistance(c1,c2) <= threshold
+     */
+    public boolean colorMatch(Color c1, Color c2)
+    {
+        return Math.pow(c1.getRed()-c2.getRed(),2)+
+                Math.pow(c1.getGreen()-c2.getGreen(),2)+
+                Math.pow(c1.getBlue()-c2.getBlue(),2) <= thresholdSquared;
     }
 
     @Override
