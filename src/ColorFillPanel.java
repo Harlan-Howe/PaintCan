@@ -29,6 +29,7 @@ public class ColorFillPanel extends JPanel
 
     public void setActiveColor(Color activeColor) {
         this.activeColor = activeColor;
+        repaint();
     }
     @Override
     public void paintComponent(Graphics g)
@@ -37,9 +38,9 @@ public class ColorFillPanel extends JPanel
         synchronized (workingImageMutex)
         {
             g.setColor(activeColor);
-            g.fillRect(0,0, getWidth(), 2);
+            g.fillRect(getWidth()-2,0, 2, getHeight());
             if (workingImage != null)
-                g.drawImage(workingImage, 0, 2, this);
+                g.drawImage(workingImage, 0, 0, this);
         }
     }
     public void doLoadImage()
@@ -71,8 +72,6 @@ public class ColorFillPanel extends JPanel
         }
     }
 
-
-
     /**
      * Deep copies the given BufferedImage's data into a new memory bank. Changing one image will not change the other.
      * @param bufferImage - the image to copy
@@ -85,4 +84,43 @@ public class ColorFillPanel extends JPanel
         boolean isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
         return new BufferedImage(colorModel, raster, isAlphaPremultiplied, null);
     }
+
+    /**
+     * finds the color of the pixel at (x, y) in workingImage. If (x, y) is out of bounds, throws a RuntimeException.
+     * @param x
+     * @param y
+     * @return Color of pixel in working image at (x, y)
+     * Note: locks mutex for workingImage, so this will wait for another thread to unlock mutex.
+     */
+    public Color getColorAt(int x, int y)
+    {
+
+        if (x>=0 && x<workingImage.getWidth() && y >=0 && y<workingImage.getHeight())
+            synchronized (workingImageMutex)
+            {
+                return new Color(workingImage.getRGB(x, y));
+            }
+        else
+            throw new RuntimeException("You attempted to get color for a point ("+x+", "+y+") that is out of bounds.");
+    }
+
+    /**
+     * changes the color of the pixel at (x, y) in workingImage to the given color. If (x, y) is out of bounds, throws
+     * a RuntimeException.
+     * @param x
+     * @param y
+     * @param c - Color to put at (x, y).
+     * Note: locks mutex for workingImage, so this will wait for another thread to unlock mutex.
+     */
+    public void setColorAt(int x, int y, Color c)
+    {
+        if (x>=0 && x<workingImage.getWidth() && y >=0 && y<workingImage.getHeight())
+            synchronized (workingImageMutex)
+            {
+                workingImage.setRGB(x, y, c.getRGB());
+            }
+        else
+            throw new RuntimeException("You attempted to set color for a point ("+x+", "+y+") that is out of bounds.");
+    }
+
 }
