@@ -67,24 +67,27 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     public void buildColorPanel()
     {
         colorPanel = Box.createVerticalBox();
-        colorButtonPanel = new JScrollPane();
-        colorButtonPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        colorButtonPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        colorPanelContent = Box.createVerticalBox();
-        colorButtonPanel.add(colorPanelContent);
+
+        // make custom add button
         BufferedImage img = new BufferedImage(ColorButton.IMAGE_SIZE, ColorButton.IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
         g.setColor(Color.WHITE);
         g.fillRect(0,0,ColorButton.IMAGE_SIZE, ColorButton.IMAGE_SIZE);
         g.setColor(Color.BLACK);
         g.drawLine(2, ColorButton.IMAGE_SIZE/2,
-                   ColorButton.IMAGE_SIZE-2,ColorButton.IMAGE_SIZE/2);
+                ColorButton.IMAGE_SIZE-2,ColorButton.IMAGE_SIZE/2);
         g.drawLine(ColorButton.IMAGE_SIZE/2,ColorButton.IMAGE_SIZE-2,
                 ColorButton.IMAGE_SIZE/2, 2);
 
         addButton = new JButton(new ImageIcon(img));
         colorPanel.add(addButton);
         addButton.addActionListener(this);
+
+        // now make the column of color buttons.
+
+        colorPanelContent = Box.createVerticalBox();
+        colorButtonPanel= new JScrollPane(colorPanelContent, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER );
+
 
         colorPanel.add(colorButtonPanel);
 
@@ -94,6 +97,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
             addColorButton(c);
         }
         colorButtons.get(0).setSelected(true);
+
     }
 
     public void buildThresholdPanel()
