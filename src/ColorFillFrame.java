@@ -57,21 +57,22 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
 
         openMenuItem = new JMenuItem("Open");
         openMenuItem.addActionListener(this);
+        openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.META_MASK));
         fileMenu.add(openMenuItem);
 
         resetMenuItem = new JMenuItem("Reset image");
         resetMenuItem.addActionListener(this);
         resetMenuItem.setEnabled(false);
+        resetMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, ActionEvent.META_MASK));
         fileMenu.add(resetMenuItem);
 
         saveMenuItem = new JMenuItem("Save");
         saveMenuItem.addActionListener(this);
+        saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.META_MASK));
         fileMenu.add(saveMenuItem);
 
         cancelMenuItem = new JMenuItem("Cancel Fill");
-        cancelMenuItem.setMnemonic(KeyEvent.VK_K);
-        cancelMenuItem.setAccelerator(KeyStroke.getKeyStroke(
-                KeyEvent.VK_X, ActionEvent.META_MASK));
+        cancelMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, ActionEvent.META_MASK));
         cancelMenuItem.addActionListener(this);
         cancelMenu.add(cancelMenuItem);
 
