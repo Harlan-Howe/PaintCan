@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ColorFillFrame extends JFrame implements ActionListener, ChangeListener
@@ -180,6 +181,47 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
             }
         }
         mainPanel.repaint();
+    }
+
+    public void doSaveScreen()
+    {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Export");
+        String[] extensions = {"jpg","gif","png"};
+        chooser.setFileFilter(new FileNameExtensionFilter("images",extensions));
+
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION)
+        {
+            String filename = chooser.getSelectedFile().getPath();
+            int i = filename.lastIndexOf('.');
+            if (i<=0)
+            {
+                try
+                {
+                    ImageIO.write(mainPanel.getWorkingImage(), "png", new File(filename + ".png"));
+                }catch(IOException ioExp)
+                {
+                    System.out.println("Problem writing file.");
+                    ioExp.printStackTrace();
+                }
+            }
+            else
+            {
+                String extension = filename.substring(i+1);
+                try
+                {
+                    ImageIO.write(mainPanel.getWorkingImage(), extension, new File(filename));
+                }catch(IOException ioExp)
+                {
+                    System.out.println("Problem writing file.");
+                    ioExp.printStackTrace();
+                }
+            }
+            Graphics2D g = (Graphics2D)getGraphics();
+            g.drawImage(exportImage, null, 0,0);
+
+        }
     }
 
     @Override
