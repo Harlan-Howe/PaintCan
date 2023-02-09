@@ -34,9 +34,13 @@ public class ColorFillPanel extends JPanel implements MouseListener
         return activeColor;
     }
 
-    public void setActiveColor(Color activeColor) {
-        this.activeColor = activeColor;
-        repaint();
+    public void setActiveColor(Color activeColor)
+    {
+        if (fillingThread != null && !fillingThread.isDoingFillProcess())
+        {
+            this.activeColor = activeColor;
+            repaint();
+        }
     }
 
     public void setStartImage(BufferedImage startImage)
