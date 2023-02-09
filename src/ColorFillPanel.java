@@ -46,6 +46,16 @@ public class ColorFillPanel extends JPanel implements MouseListener
         setPreferredSize(new Dimension(startImage.getWidth()+2, startImage.getHeight()));
     }
 
+    public BufferedImage getWorkingImage()
+    {
+        BufferedImage img;
+        synchronized (workingImageMutex)
+        {
+             img = deepcopy(workingImage);
+        }
+        return img;
+    }
+
     public void setThreshold(double threshold)
     {
         thresholdSquared = Math.pow(threshold,2);
