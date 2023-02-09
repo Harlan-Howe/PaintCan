@@ -12,7 +12,10 @@ import java.util.ArrayList;
 
 public class ColorFillFrame extends JFrame implements ActionListener, ChangeListener
 {
-    private Box colorPanel, thresholdPanel;
+    private Box colorPanel;
+    private JScrollPane colorButtonPanel;
+    private Box colorPanelContent;
+    private Box thresholdPanel;
     private ColorFillPanel mainPanel;
     private JButton addButton;
     private ButtonGroup colorButtonGroup;
@@ -64,6 +67,11 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     public void buildColorPanel()
     {
         colorPanel = Box.createVerticalBox();
+        colorButtonPanel = new JScrollPane();
+        colorButtonPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        colorButtonPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        colorPanelContent = Box.createVerticalBox();
+        colorButtonPanel.add(colorPanelContent);
         BufferedImage img = new BufferedImage(ColorButton.IMAGE_SIZE, ColorButton.IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
         Graphics g = img.getGraphics();
         g.setColor(Color.WHITE);
@@ -77,6 +85,9 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         addButton = new JButton(new ImageIcon(img));
         colorPanel.add(addButton);
         addButton.addActionListener(this);
+
+        colorPanel.add(colorButtonPanel);
+
         colorButtons = new ArrayList<ColorButton>();
         for (Color c: startColors)
         {
@@ -107,7 +118,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     {
         ColorButton cb = new ColorButton(c);
         colorButtons.add(cb);
-        colorPanel.add(cb);
+        colorPanelContent.add(cb);
         cb.addActionListener(this);
         if (colorButtonGroup == null)
             colorButtonGroup = new ButtonGroup();
