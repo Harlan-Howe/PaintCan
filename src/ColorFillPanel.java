@@ -137,6 +137,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
             }
         else
             throw new RuntimeException("You attempted to set color for a point ("+x+", "+y+") that is out of bounds.");
+        repaint();
     }
 
     @Override
@@ -238,6 +239,8 @@ public class ColorFillPanel extends JPanel implements MouseListener
 
            // System.out.println("fill with color "+activeColor+" replacing "+colorToReplace+" at ("+x+", "+y+").");
 
+            //TODO: write this part of the program! Consider base case(s) and then write the program that changes the
+            // color of the pixel and makes the recursive call.
             if (x<0 || x>=workingImage.getWidth() || y<0 || y>= workingImage.getHeight())
                 return;
 
@@ -245,7 +248,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
                 return;
 
             setColorAt(x,y,activeColor);
-            repaint();
+
 
             for (int i=-1; i<2; i++)
                 for (int j=-1; j<2; j++)
