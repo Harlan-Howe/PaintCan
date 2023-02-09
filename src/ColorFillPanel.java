@@ -50,6 +50,12 @@ public class ColorFillPanel extends JPanel implements MouseListener
         System.out.println("Threshold squared is now "+thresholdSquared);
     }
 
+    public void cancelFill()
+    {
+        if (fillingThread.doingFillProcess)
+            fillingThread.interrupt();
+    }
+
     /**
      * determines whether the two given colors have a color distance less than the threshold.
      * @param c1
