@@ -18,6 +18,8 @@ public class ColorFillPanel extends JPanel implements MouseListener
     private FillThread fillingThread;
     private double thresholdSquared;
 
+    private static final int COLOR_DELAY = 2; // delay in ms after each pixel change. Must be positive.
+
     private Object workingImageMutex;
 
     public ColorFillPanel()
@@ -52,7 +54,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
 
     public void cancelFill()
     {
-        if (fillingThread.doingFillProcess)
+        if (fillingThread.isDoingFillProcess())
             fillingThread.interrupt();
     }
 
@@ -144,6 +146,13 @@ public class ColorFillPanel extends JPanel implements MouseListener
         else
             throw new RuntimeException("You attempted to set color for a point ("+x+", "+y+") that is out of bounds.");
         repaint();
+        try
+        {
+            Thread.sleep(COLOR_DELAY);
+        }catch (InterruptedException iExp)
+        {
+            iExp.printStackTrace();
+        }
     }
 
     @Override
@@ -196,7 +205,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
             doingFillProcess = false;
         }
 
-        public void interrupt() { shouldInterrupt = true;}
+        public void interrupt() { shouldInterrupt = true; doingFillProcess = false;}
         public void startFillProcess() {doingFillProcess = true;}
         public boolean isDoingFillProcess() {return doingFillProcess;}
 
