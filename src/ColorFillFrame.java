@@ -24,7 +24,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     private ArrayList<ColorButton> colorButtons;
     private JColorChooser chooser;
     private File lastFile = null;
-    private JMenuItem openMenuItem, resetMenuItem, cancelMenuItem;
+    private JMenuItem openMenuItem, resetMenuItem, cancelMenuItem, saveMenuItem;
     private JSlider thresholdSlider;
 
     public static final Color[] startColors = {Color.RED, Color.GREEN, Color.BLUE};
@@ -63,6 +63,10 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         resetMenuItem.addActionListener(this);
         resetMenuItem.setEnabled(false);
         fileMenu.add(resetMenuItem);
+
+        saveMenuItem = new JMenuItem("Save");
+        saveMenuItem.addActionListener(this);
+        fileMenu.add(saveMenuItem);
 
         cancelMenuItem = new JMenuItem("Cancel Fill");
         cancelMenuItem.setMnemonic(KeyEvent.VK_K);
@@ -218,8 +222,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
                     ioExp.printStackTrace();
                 }
             }
-            Graphics2D g = (Graphics2D)getGraphics();
-            g.drawImage(exportImage, null, 0,0);
+
 
         }
     }
@@ -238,8 +241,11 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
             mainPanel.resetWorkingImage();
         else if (e.getSource() == cancelMenuItem)
         {
-            System.out.println("cancel.");
             mainPanel.cancelFill();
+        }
+        else if (e.getSource() == saveMenuItem)
+        {
+            doSaveScreen();
         }
         else if (e.getSource() instanceof ColorButton)
         {
