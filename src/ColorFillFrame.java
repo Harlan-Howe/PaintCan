@@ -6,6 +6,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -22,8 +23,7 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     private ArrayList<ColorButton> colorButtons;
     private JColorChooser chooser;
     private File lastFile = null;
-    private JMenuItem openMenuItem;
-    private JMenuItem resetMenuItem;
+    private JMenuItem openMenuItem, resetMenuItem, cancelMenuItem;
     private JSlider thresholdSlider;
 
     public static final Color[] startColors = {Color.RED, Color.GREEN, Color.BLUE};
@@ -50,7 +50,9 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
     {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
+        JMenu cancelMenu = new JMenu("Cancel");
         menuBar.add(fileMenu);
+        menuBar.add(cancelMenu);
 
         openMenuItem = new JMenuItem("Open");
         openMenuItem.addActionListener(this);
@@ -60,6 +62,14 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         resetMenuItem.addActionListener(this);
         resetMenuItem.setEnabled(false);
         fileMenu.add(resetMenuItem);
+
+        cancelMenuItem = new JMenuItem("Cancel Fill");
+        cancelMenuItem.setMnemonic(KeyEvent.VK_K);
+        cancelMenuItem.setAccelerator(KeyStroke.getKeyStroke(
+                KeyEvent.VK_X, ActionEvent.META_MASK));
+        cancelMenuItem.addActionListener(this);
+        cancelMenu.add(cancelMenuItem);
+
 
         this.setJMenuBar(menuBar);
     }
@@ -184,6 +194,11 @@ public class ColorFillFrame extends JFrame implements ActionListener, ChangeList
         }
         else if (e.getSource() == resetMenuItem)
             mainPanel.resetWorkingImage();
+        else if (e.getSource() == cancelMenuItem)
+        {
+            System.out.println("cancel.");
+            mainPanel.cancelFill();
+        }
         else if (e.getSource() instanceof ColorButton)
         {
             Color c = ((ColorButton) e.getSource()).getMyColor();
