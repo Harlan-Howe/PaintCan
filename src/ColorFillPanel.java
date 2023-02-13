@@ -1,12 +1,10 @@
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
 
 
 public class ColorFillPanel extends JPanel implements MouseListener
@@ -20,7 +18,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
 
     private static final int COLOR_DELAY = 2; // delay in ms after each pixel change. Must be positive.
 
-    private Object workingImageMutex;
+    private final Object workingImageMutex;
 
     public ColorFillPanel()
     {
@@ -76,8 +74,8 @@ public class ColorFillPanel extends JPanel implements MouseListener
 
     /**
      * determines whether the two given colors have a color distance less than the threshold.
-     * @param c1
-     * @param c2
+     * @param c1 - first color
+     * @param c2 - second color
      * @return whether colorDistance(c1,c2) <= threshold
      */
     public boolean colorMatch(Color c1, Color c2)
@@ -116,7 +114,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
      * Deep copies the given BufferedImage's data into a new memory bank. Changing one image will not change the other.
      * @param bufferImage - the image to copy
      * @return the deep copy of this image.
-     * @author https://bytenota.com/java-cloning-a-bufferedimage-object/
+     * @author <a href="https://bytenota.com/java-cloning-a-bufferedimage-object/"> source</a>
      */
     public static BufferedImage deepcopy(BufferedImage bufferImage) {
         ColorModel colorModel = bufferImage.getColorModel();
@@ -127,8 +125,8 @@ public class ColorFillPanel extends JPanel implements MouseListener
 
     /**
      * finds the color of the pixel at (x, y) in workingImage. If (x, y) is out of bounds, throws a RuntimeException.
-     * @param x
-     * @param y
+     * @param x - x pos
+     * @param y - y pos
      * @return Color of pixel in working image at (x, y)
      * Note: locks mutex for workingImage, so this will wait for another thread to unlock mutex.
      */
@@ -147,8 +145,8 @@ public class ColorFillPanel extends JPanel implements MouseListener
     /**
      * changes the color of the pixel at (x, y) in workingImage to the given color. If (x, y) is out of bounds, throws
      * a RuntimeException.
-     * @param x
-     * @param y
+     * @param x - x Pos
+     * @param y - y Pos
      * @param c - Color to put at (x, y).
      * Note: locks mutex for workingImage, so this will wait for another thread to unlock mutex.
      */
@@ -274,25 +272,7 @@ public class ColorFillPanel extends JPanel implements MouseListener
 
             //TODO: write this part of the program! Consider base case(s) and then write the program that changes the
             // color of the pixel and makes the recursive call.
-            if (x<0 || x>=workingImage.getWidth() || y<0 || y>= workingImage.getHeight())
-                return;
 
-            if (!colorMatch(colorToReplace,getColorAt(x,y)))
-                return;
-
-            setColorAt(x,y,activeColor);
-
-
-            for (int i=-1; i<2; i++)
-                for (int j=-1; j<2; j++)
-                {
-                    if (i==0 && j==0)
-                        continue;
-//                    if (x+i<0 || x+i>=workingImage.getWidth() || y+j < 0 || y+j >= workingImage.getHeight())
-//                        continue;
-//                    if (colorMatch(colorToReplace, getColorAt(x+i, y+j)))
-                        fillWithColor(x+i, y+j, colorToReplace);
-                }
 
         }
 
