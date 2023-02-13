@@ -62,6 +62,8 @@ public class ColorFillPanel extends JPanel implements MouseListener
 
     public void setThreshold(double threshold)
     {
+        if (fillingThread.isDoingFillProcess())
+            return;
         thresholdSquared = Math.pow(threshold,2);
         System.out.println("Threshold squared is now "+thresholdSquared);
     }
@@ -190,6 +192,8 @@ public class ColorFillPanel extends JPanel implements MouseListener
             fillingThread = new FillThread();
             fillingThread.start();
         }
+        if (fillingThread.isDoingFillProcess())
+            return;
         startX = e.getX();
         startY = e.getY();
         fillingThread.startFillProcess();
